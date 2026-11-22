@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.hypothesis/
+*.egg-info/
+private_files/
+
+# Node
+node_modules/
+frontend/dist/
+*.tsbuildinfo
+
+# Build output (bundles are attached to GitHub Releases, not committed)
+build/
+
+# Runtime data (portable / local dev)
+data/
+*.db
+.env
+
+# OS
+.DS_Store
+Thumbs.db

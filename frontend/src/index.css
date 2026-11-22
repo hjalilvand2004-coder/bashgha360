@@ -1,0 +1,104 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "@fontsource/vazirmatn/400.css";
+@import "@fontsource/vazirmatn/500.css";
+@import "@fontsource/vazirmatn/700.css";
+@import "@fontsource/vazirmatn/800.css";
+
+/* Design tokens — light & dark (docs/07); contrast-checked pairs.
+   v1.2: خوانا‌تر و جوان‌تر — تُن نیلی/بنفش مولتی‌کروم با لهجهٔ فیروزه‌ای */
+:root,
+.light {
+  --c-bg: #eef1fb;
+  --c-surface: #ffffff;
+  --c-primary: #24306b;
+  --c-primary-contrast: #ffffff;
+  --c-accent: #0e9f9a;
+  --c-gold: #b8860b;
+  --c-text: #141a2e;
+  --c-text-muted: #5a6478;
+  --c-border: #dde3f2;
+  --c-success: #1b7f4d;
+  --c-warning: #b25e09;
+  --c-danger: #b3261e;
+}
+.dark {
+  --c-bg: #0b1020;
+  --c-surface: #131b30;
+  --c-primary: #a7b4ee;
+  --c-primary-contrast: #0b1020;
+  --c-accent: #4ed8cf;
+  --c-gold: #e3b84c;
+  --c-text: #e8eaf2;
+  --c-text-muted: #9aa3b8;
+  --c-border: #273252;
+  --c-success: #5bd59b;
+  --c-warning: #f0b25a;
+  --c-danger: #f08c85;
+}
+
+html { font-family: "Vazirmatn", Tahoma, sans-serif; scroll-behavior: smooth; }
+body { @apply bg-bg text-ink antialiased; }
+
+/* visible focus for keyboard users (UX-08) */
+:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px; border-radius: 4px; }
+
+/* thin gradient scrollbars for long lists */
+.scroll-thin::-webkit-scrollbar { width: 8px; height: 8px; }
+.scroll-thin::-webkit-scrollbar-track { background: transparent; }
+.scroll-thin::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--c-primary), var(--c-accent)); border-radius: 8px; }
+
+/* ---- aurora background (v1.2) — لایهٔ تزئینی پشت کل برنامه ---- */
+.orb {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(90px);
+  opacity: .5;
+  animation: float 18s ease-in-out infinite;
+}
+.light .orb { opacity: .35; }
+.orb-a { top: -12%; right: -6%; width: 44vw; height: 44vw; background: radial-gradient(circle, #6d7ff0, transparent 65%); }
+.orb-b { top: 30%; left: -14%; width: 40vw; height: 40vw; background: radial-gradient(circle, #37c8c0, transparent 65%); animation-delay: -6s; }
+.orb-c { bottom: -18%; right: 22%; width: 36vw; height: 36vw; background: radial-gradient(circle, #b98df2, transparent 65%); animation-delay: -12s; }
+.dark .orb { opacity: .22; }
+
+.bg-grid {
+  background-image: linear-gradient(to left, rgba(90, 100, 160, .07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(90, 100, 160, .07) 1px, transparent 1px);
+  background-size: 34px 34px;
+}
+.mask-fade { mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, black 40%, transparent 100%); }
+
+@keyframes float {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  33% { transform: translate3d(-2.5%, 3.5%, 0) scale(1.05); }
+  66% { transform: translate3d(2.5%, -2.5%, 0) scale(.97); }
+}
+
+/* ---- entrance animations ---- */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up { animation: fade-up .35s ease-out both; }
+.animate-in { animation: fade-up .3s ease-out both; }
+
+@keyframes shine {
+  from { background-position: 200% center; }
+  to { background-position: -200% center; }
+}
+/* عنوان گرادیانی متحرک — برای PageHeader و هیرو */
+.text-shine {
+  background: linear-gradient(90deg, var(--c-primary), var(--c-accent), var(--c-gold), var(--c-primary));
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shine 8s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}

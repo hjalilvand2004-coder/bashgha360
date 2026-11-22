@@ -1,0 +1,49 @@
+name: build-portable-release
+
+# ساخت خودکار نسخهٔ قابل‌حمل ویندوز/لینوکس و پیوست به Release — با پوش تگ اجرا می‌شود:
+#   git tag v1.1.0 && git push origin v1.1.0
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build frontend SPA
+        working-directory: frontend
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
+
+      - name: Build portable bundles (Windows + Linux)
+        run: |
+          sudo apt-get update -y && sudo apt-get install -y zip
+          python3 scripts/build_portable.py --platform both --out build/portable
+
+      - name: Extract release notes
+        id: notes
+        run: |
+          VER="${GITHUB_REF_NAME#v}"
+          FILE="docs/release/RELEASE_NOTES_v${VER}.md"
+          if [ -f "$FILE" ]; then BODY="$FILE"; else BODY="docs/release/RELEASE_NOTES_v1.1.0.md"; fi
+          echo "body=$BODY" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release with assets
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "باشگاه دانشجو۳۶۰ — نسخهٔ قابل‌حمل ${{ github.ref_name }}"
+          body_path: ${{ steps.notes.outputs.body }}
+          files: |
+            build/portable/club360-portable-windows-x64-*.zip
+            build/portable/club360-portable-linux-x64-*.tar.gz

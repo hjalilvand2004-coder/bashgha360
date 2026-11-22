@@ -1,0 +1,19 @@
+"""Registry importing all module models so Alembic autogenerate sees the full metadata (DM-01)."""
+from app.modules.identity_access import models as identity_access  # noqa: F401
+from app.modules.memberships_consents import models as memberships_consents  # noqa: F401
+from app.modules.student_goals import models as student_goals  # noqa: F401
+from app.modules.event_ingestion import models as event_ingestion  # noqa: F401
+from app.modules.policy_engine import models as policy_engine  # noqa: F401
+from app.modules.points_ledger import models as points_ledger  # noqa: F401
+from app.modules.achievements_tiers import models as achievements_tiers  # noqa: F401
+from app.modules.missions_groups import models as missions_groups  # noqa: F401
+from app.modules.rewards_fulfillment import models as rewards_fulfillment  # noqa: F401
+from app.modules.recommendations import models as recommendations  # noqa: F401
+from app.modules.integrity_reviews import models as integrity_reviews  # noqa: F401
+from app.modules.appeals import models as appeals  # noqa: F401
+from app.modules.notifications import models as notifications  # noqa: F401
+from app.modules.audit import models as audit  # noqa: F401
+from app.modules.club_experience import models as club_experience  # noqa: F401
+from app.shared import outbox as outbox_models  # noqa: F401
+from app.shared import jobs as job_models  # noqa: F401
+from app.shared import idempotency as idem_models  # noqa: F401

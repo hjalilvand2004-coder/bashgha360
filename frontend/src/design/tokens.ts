@@ -1,0 +1,41 @@
+export const TOKENS = {
+  radius: { sm: 6, md: 10, lg: 16 },
+  space: [4, 8, 12, 16, 24, 32, 48],
+  motion: { fast: 120, base: 200, celebrate: 600 },
+  palette: {
+    navy: "#1E2A5A",
+    navyDark: "#A7B4EE",
+    teal: "#0E9F9A",
+    tealDark: "#4ED8CF",
+    gold: "#B8860B",
+    goldDark: "#E3B84C",
+  },
+} as const;
+
+/** Role-aware navigation (بخش ۱۴ سند کارفرما) — RTL labels. */
+export const NAV: { to: string; label: string; icon: string; perm?: string; role?: string; roles?: string[] }[] = [
+  { to: "/", label: "داشبورد", icon: "home" },
+  { to: "/goals", label: "اهداف و ترجیحات", icon: "target", perm: "ledger:read_own" },
+  { to: "/showcase", label: "فضای دستاوردها", icon: "trophy" },
+  { to: "/ledger", label: "دفترکل و محاسبات", icon: "list", perm: "ledger:read_own" },
+  { to: "/badges", label: "سطح و نشان‌ها", icon: "medal", perm: "ledger:read_own" },
+  { to: "/missions", label: "مأموریت‌ها", icon: "flag", perm: "ledger:read_own" },
+  { to: "/rewards", label: "کاتالوگ پاداش", icon: "gift", perm: "ledger:read_own" },
+  { to: "/requests", label: "درخواست‌ها و رسیدها", icon: "receipt", perm: "rewards:request" },
+  { to: "/recommendations", label: "پیشنهادها", icon: "sparkles", perm: "ledger:read_own" },
+  { to: "/cases", label: "پرونده و اعتراض", icon: "shield", perm: "appeals:submit" },
+  { to: "/privacy", label: "حریم خصوصی و خروج", icon: "lock", perm: "ledger:read_own" },
+  { to: "/approvals", label: "تأیید فعالیت‌ها", icon: "check", role: "professor" },
+  { to: "/advisees", label: "دانشجویان من", icon: "users", role: "advisor" },
+  { to: "/admin", label: "نمای کلی باشگاه", icon: "gauge", role: "club_manager" },
+  { to: "/admin/policies", label: "سیاست‌ها و شبیه‌سازی", icon: "scale", role: "club_manager" },
+  { to: "/admin/catalog", label: "کاتالوگ و درخواست‌ها", icon: "package", role: "club_manager" },
+  { to: "/admin/sso", label: "تنظیمات ورود یکپارچه", icon: "key", roles: ["club_manager", "tech_admin"] },
+  { to: "/admin/health", label: "سلامت اتصال و صف‌ها", icon: "activity", role: "club_manager" },
+  { to: "/policy-approvals", label: "تأیید سیاست‌ها", icon: "stamp", role: "policy_officer" },
+  { to: "/provider", label: "پنل ارائه‌دهنده", icon: "store", role: "reward_provider" },
+  { to: "/review-cases", label: "صف پرونده‌ها", icon: "folder", role: "edtech_specialist" },
+  { to: "/appeals-queue", label: "اعتراض‌ها (مرجع مستقل)", icon: "gavel", role: "appeal_referee" },
+  { to: "/audit", label: "آدیت و حسابرسی", icon: "file-search", role: "auditor" },
+  { to: "/tech", label: "پایش فنی", icon: "terminal", role: "tech_admin" },
+];
