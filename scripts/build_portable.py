@@ -33,6 +33,22 @@ PBS_ASSET = f"cpython-{PY_VERSION}+{PBS_RELEASE}-x86_64-unknown-linux-gnu-instal
 WIN_NAME = "club360-portable-windows-x64"
 LINUX_NAME = "club360-portable-linux-x64"
 
+
+def bundle_version() -> str:
+    """نسخهٔ بسته — از env یا تگ گیت؛ نهایی: مقدار پیش‌فرض فعلی."""
+    import os
+    env = os.environ.get("CLUB360_VERSION") or os.environ.get("GITHUB_REF_NAME")
+    if env and env.startswith("v"):
+        return env
+    try:
+        t = subprocess.run(["git", "describe", "--tags", "--abbrev=0"],
+                           capture_output=True, text=True, cwd=REPO)
+        if t.returncode == 0 and t.stdout.strip().startswith("v"):
+            return t.stdout.strip()
+    except Exception:
+        pass
+    return "v1.3.0"
+
 ENV_FILE = """\
 # ============================================================
 #  باشگاه دانشجو۳۶۰ — پیکربندی نسخهٔ قابل‌حمل
@@ -229,7 +245,7 @@ def build_win(out: Path) -> Path:
     write_launchers(root)
 
     log("WIN: zipping …")
-    zip_path = out / f"{name}-v1.1.1.zip"
+    zip_path = out / f"{name}-{bundle_version()}.zip"
     if zip_path.exists():
         zip_path.unlink()
     run(["zip", "-r", "-X", "-q", str(zip_path), name], cwd=out)
@@ -272,7 +288,7 @@ def build_linux(out: Path) -> Path:
     write_launchers(root)
 
     log("LINUX: tar.gz …")
-    tgz = out / f"{name}-v1.1.1.tar.gz"
+    tgz = out / f"{name}-{bundle_version()}.tar.gz"
     if tgz.exists():
         tgz.unlink()
     run(["tar", "-czf", str(tgz), name], cwd=out)
