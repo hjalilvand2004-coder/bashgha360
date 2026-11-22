@@ -14,6 +14,7 @@ from app.modules.appeals import models as appeals  # noqa: F401
 from app.modules.notifications import models as notifications  # noqa: F401
 from app.modules.audit import models as audit  # noqa: F401
 from app.modules.club_experience import models as club_experience  # noqa: F401
+from app.modules.student_life import models as student_life  # noqa: F401
 from app.shared import outbox as outbox_models  # noqa: F401
 from app.shared import jobs as job_models  # noqa: F401
 from app.shared import idempotency as idem_models  # noqa: F401

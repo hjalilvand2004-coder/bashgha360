@@ -12,9 +12,14 @@ export const TOKENS = {
   },
 } as const;
 
-/** Role-aware navigation (بخش ۱۴ سند کارفرما) — RTL labels. */
+/** Role-aware navigation (بخش ۱۴ سند کارفرما) — RTL labels.
+ * v1.5: چهار وعدهٔ «زندگی دانشجویی» بالای فهرست فردی؛ امتیاز/نشان به «پیشرفت و مزایا» می‌روند. */
 export const NAV: { to: string; label: string; icon: string; perm?: string; role?: string; roles?: string[] }[] = [
-  { to: "/", label: "داشبورد", icon: "home" },
+  { to: "/", label: "خانهٔ باشگاه", icon: "home" },
+  { to: "/peers", label: "هم‌پایه‌ها", icon: "users", perm: "ledger:read_own" },
+  { to: "/week", label: "همین هفته در دانشگاه", icon: "calendar", perm: "ledger:read_own" },
+  { to: "/bundles", label: "بستهٔ ساخت نمونه‌کار", icon: "hammer", perm: "ledger:read_own" },
+  { to: "/voice", label: "صدای دانشجو", icon: "megaphone", perm: "ledger:read_own" },
   { to: "/goals", label: "اهداف و ترجیحات", icon: "target", perm: "ledger:read_own" },
   { to: "/showcase", label: "فضای دستاوردها", icon: "trophy" },
   { to: "/ledger", label: "دفترکل و محاسبات", icon: "list", perm: "ledger:read_own" },

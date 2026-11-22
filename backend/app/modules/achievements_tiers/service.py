@@ -53,6 +53,13 @@ def check_badges(db: Session, *, university_id: str, student_ref_id: str) -> lis
         criteria = json.loads(b.criteria_json or "{}")
         ok = True
         for ev_type, min_count in criteria.items():
+            try:
+                threshold = int(min_count)
+            except (TypeError, ValueError):
+                # معیار غیرشمارشی (مثل output/group) — نشان داستانی است و در جریان
+                # دیگری صادر می‌شود؛ شمارش رویداد نمی‌تواند آن را تأیید یا رد کند
+                ok = False
+                break
             cnt = db.execute(
                 select(func.count()).select_from(EducationalEvent).where(
                     EducationalEvent.university_id == university_id,
@@ -60,7 +67,7 @@ def check_badges(db: Session, *, university_id: str, student_ref_id: str) -> lis
                     EducationalEvent.verification_status == "verified",
                     EducationalEvent.student_reference.in_(ext),
                 )).scalar() or 0
-            if int(cnt) < int(min_count):
+            if int(cnt) < threshold:
                 ok = False
                 break
         if not ok:

@@ -310,7 +310,7 @@ def _seed(db) -> None:
                        max_points=Decimal("60.00"), is_group=True))
     db.flush()
     mission_grp = db.execute(select(Mission).where(Mission.university_id == u1.id, Mission.is_group.is_(True))).scalars().first()
-    grp = db.execute(select(LearningGroup).where(LearningGroup.university_id == u1.id)).scalar_one_or_none()
+    grp = db.execute(select(LearningGroup).where(LearningGroup.university_id == u1.id)).scalars().first()
     if grp is None:
         grp = LearningGroup(university_id=u1.id, mission_id=mission_grp.id, title_fa="گروه مطالعهٔ مدار (نمونه)", capacity=6)
         db.add(grp)
@@ -348,13 +348,13 @@ def _seed(db) -> None:
     db.flush()
 
     # ---- ۱۱) پروندهٔ بررسی و اعتراض پذیرفته‌شده (SEED-11) — قبل از پاداش‌ها تا مانده‌ها بسازد ----
-    case = db.execute(select(ReviewCase).where(ReviewCase.university_id == u1.id)).scalar_one_or_none()
+    case = db.execute(select(ReviewCase).where(ReviewCase.university_id == u1.id)).scalars().first()
     if case is None:
         sig = integrity.create_signal(db, university_id=u1.id, kind="risk_pattern",
                                       rule_code="SEED_SAMPLE_PATTERN", severity="info",
                                       subject_student_ref=reza.id, refs={"note": "نمونهٔ آموزشی"})
         case = integrity.open_case(db, sig, summary_fa="نمونهٔ پروندهٔ بررسی برای آموزش")
-    appeal = db.execute(select(appeals.Appeal).where(appeals.Appeal.university_id == u1.id)).scalar_one_or_none()
+    appeal = db.execute(select(appeals.Appeal).where(appeals.Appeal.university_id == u1.id)).scalars().first()
     if appeal is None:
         a = appeals.submit(db, university_id=u1.id, student_ref_id=reza.id, subject_type="ledger_correction",
                            subject_id=None, ground_fa="نمونهٔ اعتراض: امتیاز جلسهٔ ۲ ثبت نشده است")
@@ -550,6 +550,66 @@ def _seed(db) -> None:
         db.add(OnboardingProfile(university_id=u1.id, user_id=users["st1@u1.demo"].id, student_ref_id=sara.id,
                                  persona="creator", interests_json=json.dumps(["build", "tech", "problem"], ensure_ascii=False),
                                  completed_at=now, first_badge_awarded=False))
+
+    # ---- ۱۲.۵) زندگی دانشجویی v1.5 — چهار وعده (نمونهٔ آزمایشی) ----
+    from .modules.student_life.models import (
+        Opportunity, PeerActivity, PeerParticipant, PortfolioBundle, StudentProposal, ProposalVote,
+    )
+
+    if not db.execute(select(PeerActivity).where(PeerActivity.university_id == u1.id)).scalars().first():
+        pa1 = PeerActivity(university_id=u1.id, host_student_ref_id=sara.id,
+                           title_fa="هم‌مطالعهٔ ساختمان داده — جمع کوچک", activity_kind="study",
+                           time_label_fa="یک‌شنبه‌ها ۱۷:۰۰", starts_at=now + timedelta(days=2),
+                           location_fa="سالن مطالعهٔ مرکزی، میز ۱۲", capacity=4, trial_ok=True,
+                           interest_tags="ساختمان داده,درس,هم‌مطالعه", state="open", created_at=now)
+        pa2 = PeerActivity(university_id=u1.id, host_student_ref_id=reza.id,
+                           title_fa="همراه پیاده‌روی عکاسی در پردیس", activity_kind="outing",
+                           time_label_fa="چهارشنبه ۹:۰۰", starts_at=now + timedelta(days=4),
+                           location_fa="ورودی اصلی پردیس", capacity=6, trial_ok=True,
+                           interest_tags="عکاسی,پیاده‌روی", state="open", created_at=now)
+        db.add_all([pa1, pa2])
+        db.flush()
+        db.add(PeerParticipant(university_id=u1.id, activity_id=pa2.id, student_ref_id=sara.id,
+                               mode="committed", state="joined", joined_at=now))
+
+    if not db.execute(select(Opportunity).where(Opportunity.university_id == u1.id)).scalars().first():
+        opps_spec = [
+            ("بازدید پشت‌صحنهٔ آزمایشگاه رباتیک", "دو ساعت دیدن نزدیک ربات‌های آزمایشگاه و پرسش‌وپاسخ",
+             "آزمایشگاه رباتیک، ساختمان ۳", now + timedelta(days=3), 120, "رایگان", True, "هیچ", True, 12, "visit"),
+            ("عصر بازی فکری (تک‌نفره‌ها هم بیایند)", "چند میز بازی فکری با میزبان؛ نیازی به همراه از قبل نیست",
+             "کافه دانشجویی", now + timedelta(days=5), 90, "رایگان", True, "هیچ", True, 16, "game"),
+            ("کارگاه «اولین پوسترت را بساز»", "با ابزارهای ساده، یک پوستر واقعی برای برنامهٔ هفته بساز",
+             "اتاق خلاقیت، دانشکدهٔ هنر", now + timedelta(days=6), 120, "رایگان", True, "هیچ", False, 10, "workshop"),
+        ]
+        for title, what, loc, st, dur, cost, is_free, prereq, solo, cap, kind in opps_spec:
+            db.add(Opportunity(university_id=u1.id, title_fa=title, what_fa=what, location_fa=loc,
+                               starts_at=st, duration_minutes=dur, cost_label_fa=cost, is_free=is_free,
+                               prereq_fa=prereq, solo_friendly=solo, capacity=cap, kind=kind,
+                               state="published", created_at=now))
+
+    if not db.execute(select(PortfolioBundle).where(PortfolioBundle.university_id == u1.id)).scalars().first():
+        db.add(PortfolioBundle(university_id=u1.id,
+                               title_fa="از صفر تا اولین صفحهٔ وب نشان‌دادنی",
+                               output_fa="یک صفحهٔ وب شخصی ساده که لینکش را هر جا می‌توانی بفرستی",
+                               tools_fa="لپ‌تاپ یا سیستم آزمایشگاه + یک حساب رایگان GitHub Pages (راهنمای ساخت حساب حضوری داده می‌شود)",
+                               guide_fa="راهنمای حضوری: دانشجوی ترم بالاتر + یک جلسه بازخورد ۲۰ دقیقه‌ای",
+                               feedback_note_fa="بازخورد واقعی روی نسخهٔ اول و نسخهٔ نهایی؛ بدون نمره و بدون مقایسه",
+                               steps_json=json.dumps([
+                                   {"label_fa": "ایده‌ات را در سه خط بنویس (۲۰ دقیقه)"},
+                                   {"label_fa": "اولین نسخهٔ ساده را بساز (با قالب آماده)"},
+                                   {"label_fa": "روی گیت‌هاب منتشر کن و لینک بگیر"},
+                                   {"label_fa": "بازخورد بگیر و یک بهبود انجام بده"},
+                               ], ensure_ascii=False),
+                               estimated_hours=4, capacity=10, newcomer_seats=3, state="published", created_at=now))
+
+    if not db.execute(select(StudentProposal).where(StudentProposal.university_id == u1.id)).scalars().first():
+        pr = StudentProposal(university_id=u1.id, author_student_ref_id=reza.id,
+                             title_fa="دورهمی عکاسی دوشنبه‌ها", body_fa="می‌خواهیم دوشنبه‌ها ساعت ۵ عصر دور هم عکاسی کنیم و دربارهٔ عکس‌ها حرف بزنیم.",
+                             support_fa="فضای عمومی + معرفی دو همراه + راهنمای مقدماتی",
+                             kind="program", state="in_review", decision_note_fa="در بررسی ظرفیت فضا", created_at=now)
+        db.add(pr)
+        db.flush()
+        db.add(ProposalVote(university_id=u1.id, proposal_id=pr.id, student_ref_id=sara.id, created_at=now))
 
     # ---- ۱۳) برچسب‌گذاری نمونه‌ها و پایان ----
     print("خلاصه: دانشگاه‌ها=2، کاربران=", len(users), "، رویدادهای معتبر پردازش‌شده و دفترکل متوازن.")

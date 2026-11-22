@@ -87,13 +87,15 @@ from .modules.recommendations.router import (rec_router, notif_router, analytics
                                              audit_router, reviews_router, appeals_router, goals_router, dc_router)
 from .modules.integrations.system_router import router as system_router, health_router  # noqa: E402
 from .modules.club_experience.router import router as club_experience_router  # noqa: E402
+from .modules.student_life.router import router as student_life_router  # noqa: E402
 
 API = "/api/v1"
 for r in (auth_router, sso_router, sso_settings_router, memberships_router, consents_router, goals_extra_router, events_router,
           policies_router, approvals_router, sim_router, points_router, ledger_router,
           tiers_router, badges_router, missions_router, groups_router, rewards_router, req_router,
           prov_router, rec_router, notif_router, analytics_router, audit_router, reviews_router,
-          appeals_router, goals_router, dc_router, system_router, health_router, club_experience_router):
+          appeals_router, goals_router, dc_router, system_router, health_router, club_experience_router,
+          student_life_router):
     app.include_router(r, prefix=API)
 
 

@@ -5,6 +5,10 @@ import Login from "./pages/Login";
 import Join from "./pages/Join";
 import Dashboard from "./pages/Dashboard";
 import Onboarding from "./pages/Onboarding";
+import Peers from "./pages/Peers";
+import Week from "./pages/Week";
+import Bundles from "./pages/Bundles";
+import Voice from "./pages/Voice";
 import Showcase from "./pages/Showcase";
 import Goals from "./pages/Goals";
 import Ledger from "./pages/Ledger";
@@ -51,6 +55,10 @@ export default function App() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/join" element={<Join />} />
         <Route path="/onboarding" element={<Onboarding />} />
+        <Route path="/peers" element={<RequirePerm perm="ledger:read_own">{<Peers />}</RequirePerm>} />
+        <Route path="/week" element={<RequirePerm perm="ledger:read_own">{<Week />}</RequirePerm>} />
+        <Route path="/bundles" element={<RequirePerm perm="ledger:read_own">{<Bundles />}</RequirePerm>} />
+        <Route path="/voice" element={<RequirePerm perm="ledger:read_own">{<Voice />}</RequirePerm>} />
         <Route path="/showcase" element={<Showcase />} />
         <Route path="/goals" element={<Goals />} />
         <Route path="/ledger" element={<Ledger />} />

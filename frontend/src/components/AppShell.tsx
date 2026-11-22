@@ -5,7 +5,8 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import {
   Home, Target, ListOrdered, Medal, Flag, Gift, Receipt, Sparkles, ShieldCheck, Lock,
   CheckSquare, Users, Gauge, Scale, Package, Activity, Stamp, Store, FolderOpen, Gavel,
-  FileSearch, Terminal, LogOut, Moon, Sun, WifiOff, KeyRound, Trophy,
+  FileSearch, Terminal, LogOut, Moon, Sun, WifiOff, KeyRound, Trophy, CalendarDays, Hammer,
+  Megaphone,
 } from "lucide-react";
 import { useAuth, hasRole } from "../lib/auth";
 import { NAV } from "../design/tokens";
@@ -16,7 +17,7 @@ const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   receipt: Receipt, sparkles: Sparkles, shield: ShieldCheck, lock: Lock, check: CheckSquare,
   users: Users, gauge: Gauge, scale: Scale, package: Package, activity: Activity, stamp: Stamp,
   store: Store, folder: FolderOpen, gavel: Gavel, "file-search": FileSearch, terminal: Terminal,
-  key: KeyRound, trophy: Trophy,
+  key: KeyRound, trophy: Trophy, calendar: CalendarDays, hammer: Hammer, megaphone: Megaphone,
 };
 
 const ROLE_FA: Record<string, string> = {

@@ -14,7 +14,7 @@
 │                      FastAPI (Modular Monolith)                     │
 │  ┌─ Middleware: CorrelationID · StructuredLog · RateLimit · CSRF    │
 │  │                                                                  │
-│  │   ┌──────────────── ۱۷ ماژول دامنه (مرزبندی روشن) ─────────────┐  │
+│  │   ┌──────────────── ۱۸ ماژول دامنه (مرزبندی روشن) ─────────────┐  │
 │  │   │ identity_access    memberships_consents   student_goals    │  │
 │  │   │ event_ingestion    policy_engine           points_ledger   │  │
 │  │   │ achievements_tiers missions_groups         rewards_fulfill.│  │
