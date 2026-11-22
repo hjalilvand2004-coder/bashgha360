@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Check, PartyPopper, Map as MapIcon } from "lucide-react";
 import { get, post, ApiError } from "../lib/api";
-import { Button, Card, Chip, PageHeader } from "../components/ui";
+import { Button, Card, Chip, Celebration, PageHeader } from "../components/ui";
 import { PATH_LABELS, formatJalali } from "../lib/format";
 import { PERSONA_LOCAL, INTEREST_LABELS, MISSION_KIND_LABELS } from "../lib/experience";
 
@@ -87,7 +87,7 @@ export default function Onboarding() {
       <div className="flex items-center gap-2 text-xs">
         {[["۱", "مسیر"], ["۲", "علاقه"], ["۳", "اولین دستاورد"]].map(([n, label], i) => (
           <div key={n} className="flex items-center gap-2">
-            <span className={`grid size-8 place-items-center rounded-full text-sm font-bold ${step > i ? "bg-gradient-to-br from-primary to-accent text-primary-fg shadow-glow" : "border border-line bg-surface text-ink-soft"}`} aria-hidden>{n}</span>
+            <span className={`step-dot ${step > i ? "done" : step === i + 1 ? "" : "!bg-line !shadow-none"}`} aria-hidden>{step > i + 1 ? "✓" : n}</span>
             <span className={step > i ? "font-bold" : "text-ink-soft"}>{label}</span>
             {i < 2 && <span className="mx-1 h-px w-8 bg-line" aria-hidden />}
           </div>
@@ -136,8 +136,9 @@ export default function Onboarding() {
       )}
 
       {step === 3 && result && (
-        <Card className="animate-fade-up text-center">
-          <PartyPopper className="mx-auto size-10 text-gold" aria-hidden />
+        <Card className="grad-border animate-fade-up rounded-xl text-center">
+          {result.first_badge_awarded && <Celebration />}
+          <PartyPopper className="mx-auto size-10 animate-wiggle text-gold" aria-hidden />
           <h2 className="mt-2 text-xl font-extrabold">اولین دستاوردت ثبت شد! 🎉</h2>
           <p className="mt-1 text-sm text-ink-soft">مسیر تو: <b>{result.persona_label_fa}</b> — به مسیر «{PATH_LABELS[result.personas.find((p) => p.key === persona)?.maps_to ?? "learning"]}» وصل می‌شود.</p>
           {result.first_badge_awarded && (

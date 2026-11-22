@@ -8,7 +8,7 @@
 @import "@fontsource/vazirmatn/800.css";
 
 /* Design tokens — light & dark (docs/07); contrast-checked pairs.
-   v1.2: خوانا‌تر و جوان‌تر — تُن نیلی/بنفش مولتی‌کروم با لهجهٔ فیروزه‌ای */
+   v1.4 — پالت جوان و شاد: علاوه بر نیلی/فیروزه‌ای/طلایی، بنفش/صورتی/نارنجی/لیمویی */
 :root,
 .light {
   --c-bg: #eef1fb;
@@ -17,6 +17,10 @@
   --c-primary-contrast: #ffffff;
   --c-accent: #0e9f9a;
   --c-gold: #b8860b;
+  --c-violet: #7c3aed;
+  --c-pink: #db2777;
+  --c-orange: #ea580c;
+  --c-lime: #65a30d;
   --c-text: #141a2e;
   --c-text-muted: #5a6478;
   --c-border: #dde3f2;
@@ -31,6 +35,10 @@
   --c-primary-contrast: #0b1020;
   --c-accent: #4ed8cf;
   --c-gold: #e3b84c;
+  --c-violet: #a78bfa;
+  --c-pink: #f472b6;
+  --c-orange: #fb923c;
+  --c-lime: #a3e635;
   --c-text: #e8eaf2;
   --c-text-muted: #9aa3b8;
   --c-border: #273252;
@@ -50,7 +58,7 @@ body { @apply bg-bg text-ink antialiased; }
 .scroll-thin::-webkit-scrollbar-track { background: transparent; }
 .scroll-thin::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--c-primary), var(--c-accent)); border-radius: 8px; }
 
-/* ---- aurora background (v1.2) — لایهٔ تزئینی پشت کل برنامه ---- */
+/* ---- aurora background — لایهٔ تزئینی پشت کل برنامه ---- */
 .orb {
   position: absolute;
   border-radius: 9999px;
@@ -98,6 +106,62 @@ body { @apply bg-bg text-ink antialiased; }
   color: transparent;
   animation: shine 8s linear infinite;
 }
+
+/* ---- v1.4: ابزارهای «جذاب دانشجویی» ---- */
+
+/* شیشهٔ محو برای هدر/کارت روی پس‌زمینهٔ aurora */
+.glass {
+  background: color-mix(in srgb, var(--c-surface) 72%, transparent);
+  backdrop-filter: blur(14px) saturate(1.4);
+  border: 1px solid color-mix(in srgb, var(--c-border) 70%, transparent);
+}
+
+/* قاب گرادیانی انیمیشنی — کارت‌های جشن/هیرو */
+.grad-border {
+  position: relative;
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--c-surface), var(--c-surface)) padding-box,
+    linear-gradient(120deg, var(--c-primary), var(--c-accent), var(--c-violet), var(--c-gold), var(--c-primary)) border-box;
+  background-size: 100% 100%, 300% 300%;
+  animation: shine 10s linear infinite;
+}
+
+/* اسکلت بارگذاری درخشان */
+.shimmer {
+  background: linear-gradient(90deg, var(--c-border) 25%, color-mix(in srgb, var(--c-border) 40%, var(--c-surface)) 50%, var(--c-border) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s linear infinite;
+}
+
+/* حباب رنگی پشت آیکن‌های آماری */
+.icon-bubble {
+  @apply grid size-10 shrink-0 place-items-center rounded-2xl text-white;
+  box-shadow: 0 4px 14px -2px currentColor;
+}
+
+/* حلقهٔ پیشرفت گرادیانی (svg) — انیمیشن پرشدن ملایم */
+.ring-track { stroke: color-mix(in srgb, var(--c-border) 80%, transparent); }
+.ring-grad { transition: stroke-dashoffset .9s cubic-bezier(.22,1,.36,1); }
+
+/* بارش کاغذرنگی (confetti) — جشن نشان/سطح/تکمیل آنبوردینگ */
+.confetti-piece {
+  position: absolute;
+  top: 0;
+  width: 8px;
+  height: 14px;
+  border-radius: 2px;
+  opacity: 0;
+  animation: confetti-fall 2.4s ease-in forwards;
+}
+
+/* مرحله‌های آنبوردینگ — شمارهٔ گرادیانی */
+.step-dot {
+  @apply grid size-9 shrink-0 place-items-center rounded-full text-sm font-extrabold text-white shadow-glow;
+  background: linear-gradient(135deg, var(--c-primary), var(--c-accent));
+}
+.step-dot.done { background: linear-gradient(135deg, var(--c-accent), var(--c-lime)); }
+.step-line { background: linear-gradient(180deg, var(--c-accent), transparent); opacity: .35; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }

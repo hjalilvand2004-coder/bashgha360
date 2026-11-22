@@ -1,8 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
+import { Flag, Gift, Sparkles, Trophy, TrendingUp, Wallet } from "lucide-react";
 import { get } from "../lib/api";
 import { useAuth, hasRole } from "../lib/auth";
-import { Button, Card, Chip, Skeleton, StatCard, stateTone } from "../components/ui";
+import { Button, Card, Chip, ProgressRing, Skeleton, StatCard, stateTone } from "../components/ui";
 import { MembershipArt } from "../components/illustrations";
 import { MiniChart, type ChartDatum } from "../components/charts";
 import { formatPoints, formatJalali, STATE_LABELS } from "../lib/format";
@@ -78,6 +79,27 @@ export default function Dashboard() {
         </Card>
       )}
 
+      {/* میان‌برهای گرادیانی — مسیرهای پرتکرار دانشجو */}
+      {isStudent && (
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {([
+            { to: "/missions", label: "مأموریت‌ها", body: "کوتاه و کم‌تعهد شروع کن", icon: <Flag className="size-5" />, grad: "from-[#155e63] to-accent", shadow: "shadow-glowAccent" },
+            { to: "/rewards", label: "کاتالوگ پاداش", body: "خرجِ امتیاز، بدون کاهش پیشرفت", icon: <Gift className="size-5" />, grad: "from-violet to-[#8b5cf6]", shadow: "shadow-glowViolet" },
+            { to: "/showcase", label: "فضای دستاوردها", body: "روایت کارهای واقعی", icon: <Trophy className="size-5" />, grad: "from-gold to-[#d3a04a]", shadow: "shadow-glowGold" },
+            { to: "/recommendations", label: "پیشنهادهای من", body: "مخصوص مسیر خودت", icon: <Sparkles className="size-5" />, grad: "from-pink to-[#ec4899]", shadow: "shadow-glowPink" },
+          ] as const).map((q) => (
+            <Link key={q.to} to={q.to}
+              className={`group flex items-center gap-3 rounded-xl bg-gradient-to-bl ${q.grad} p-4 text-white ${q.shadow} transition-all duration-300 hover:-translate-y-1 hover:shadow-lg`}>
+              <span aria-hidden className="grid size-11 shrink-0 place-items-center rounded-2xl bg-white/15 backdrop-blur transition-transform duration-300 group-hover:scale-110 group-hover:animate-wiggle">{q.icon}</span>
+              <span className="min-w-0">
+                <span className="block text-sm font-extrabold">{q.label}</span>
+                <span className="block text-[11px] opacity-80">{q.body}</span>
+              </span>
+            </Link>
+          ))}
+        </div>
+      )}
+
       {isStudent && membership?.state && onb && !onb.completed && (
         <Card className="relative overflow-hidden border-gold/40 bg-gradient-to-bl from-gold/10 to-transparent">
           <div className="flex flex-wrap items-center justify-between gap-3">
@@ -113,9 +135,9 @@ export default function Dashboard() {
           <div className="grid gap-3 sm:grid-cols-2">
             {summary ? (
               <>
-                <StatCard title="امتیاز قابل مصرف (پاداش)" value={formatPoints(summary.available)}
+                <StatCard title="امتیاز قابل مصرف (پاداش)" value={formatPoints(summary.available)} icon={<Wallet className="size-5" />} hue="accent"
                   hint={`در انتظار تأیید: ${formatPoints(summary.pending)} · رزروشده: ${formatPoints(summary.reserved)}`} />
-                <StatCard title="پیشرفت تجمعی تأییدشده (سطح و نشان)" value={formatPoints(summary.cumulative_progress)} tone="gold"
+                <StatCard title="پیشرفت تجمعی تأییدشده (سطح و نشان)" value={formatPoints(summary.cumulative_progress)} icon={<TrendingUp className="size-5" />} hue="gold"
                   hint={`مصرف‌شده تا امروز: ${formatPoints(summary.spent_total)}`} />
               </>
             ) : <Skeleton className="h-24" />}
@@ -127,17 +149,30 @@ export default function Dashboard() {
       <div className="grid gap-4 md:grid-cols-2">
         <MiniChart title="ترکیب حساب امتیاز شما" data={chart} tableCaption="ترکیب حساب امتیاز" />
         <Card>
-          <p className="mb-2 text-sm font-bold">مسیر سطح (استمرار یادگیری)</p>
+          <div className="mb-2 flex items-center gap-3">
+            {learning && (
+              <ProgressRing value={Number(learning.progress ?? 0)} max={nextTier?.min_progress ?? Math.max(1, Number(learning.progress ?? 0))} size={72} stroke={8}
+                label="پیشرفت مسیر یادگیری">
+                <span className="text-sm font-extrabold text-accent">{Math.min(100, Math.round((Number(learning.progress ?? 0) / Math.max(1, nextTier?.min_progress ?? 1)) * 100))}٪</span>
+              </ProgressRing>
+            )}
+            <div>
+              <p className="text-sm font-bold">مسیر سطح (استمرار یادگیری)</p>
+              {learning && <p className="text-xs text-ink-soft">{nextTier ? `تا سطح «${nextTier.title_fa}»: ${formatPoints(Math.max(0, nextTier.min_progress - Number(learning.progress)))}` : "بالاترین سطح 🎉"}</p>}
+            </div>
+          </div>
           {learning ? (
             <>
               <div className="mb-2 flex items-center justify-between text-xs text-ink-soft">
                 <span>پیشرفت: {formatPoints(learning.progress)}</span>
-                <span>{nextTier ? `تا سطح «${nextTier.title_fa}»: ${formatPoints(Math.max(0, nextTier.min_progress - Number(learning.progress)))}` : "بالاترین سطح"}</span>
               </div>
               <ol className="mt-3 space-y-2">
-                {learning.tiers.map((t) => (
-                  <li key={t.level_no} className="flex items-center justify-between rounded-md border border-line px-3 py-2 text-sm">
-                    <span>سطح {t.level_no} — {t.title_fa}</span>
+                {learning.tiers.map((t, idx) => (
+                  <li key={t.level_no} className={`flex items-center justify-between rounded-md border px-3 py-2 text-sm transition-colors ${t.achieved ? "border-ok/40 bg-ok/5" : "border-line"}`}>
+                    <span className="flex items-center gap-2">
+                      <span aria-hidden className={`grid size-7 shrink-0 place-items-center rounded-full text-xs font-extrabold ${t.achieved ? "bg-gradient-to-br from-accent to-lime text-white shadow-glowAccent" : "bg-bg text-ink-soft"}`}>{t.achieved ? "✓" : t.level_no}</span>
+                      <span className={idx === 0 ? "" : ""}>سطح {t.level_no} — {t.title_fa}</span>
+                    </span>
                     {t.achieved ? <Chip tone="ok">کسب‌شده</Chip> : <Chip>از {formatPoints(t.min_progress)}</Chip>}
                   </li>
                 ))}

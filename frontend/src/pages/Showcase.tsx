@@ -9,6 +9,13 @@ import { STORY_KIND_LABELS } from "../lib/experience";
 type Story = { id: string; title_fa: string; body_fa: string; kind: string; kind_label_fa: string; subject_label_fa: string; published_at: string };
 
 const KIND_ICON: Record<string, string> = { build: "🛠️", help: "🤝", skill: "🎯", event: "🎪" };
+/** رنگ لبهٔ بالای هر روایت بر اساس نوع — تشخیص سریع و ظاهر شاد */
+const KIND_BAR: Record<string, string> = {
+  build: "bg-gradient-to-l from-violet to-pink",
+  help: "bg-gradient-to-l from-accent to-lime",
+  skill: "bg-gradient-to-l from-primary to-accent",
+  event: "bg-gradient-to-l from-gold to-orange",
+};
 
 /** فضای دستاوردها — روایت‌های کوتاه و الهام‌بخش به‌جای جدول رتبه‌بندی؛ فقط با رضایت افراد. */
 export default function Showcase() {
@@ -16,12 +23,12 @@ export default function Showcase() {
 
   return (
     <div className="space-y-5">
-      <PageHeader title="فضای دستاوردها" subtitle="اینجا جای جدول رتبه‌بندی نیست؛ روایتِ کاری که واقعاً انجام شده را می‌خوانید. هر روایت فقط با رضایت صاحبش نمایش داده می‌شود." />
+      <PageHeader title="فضای دستاوردها" icon={<Sparkles className="size-5" />} subtitle="اینجا جای جدول رتبه‌بندی نیست؛ روایتِ کاری که واقعاً انجام شده را می‌خوانید. هر روایت فقط با رضایت صاحبش نمایش داده می‌شود." />
 
       <div className="grid gap-4 md:grid-cols-3">
-        <Card className="border-accent/30 bg-gradient-to-bl from-accent/10 to-transparent md:col-span-1">
-          <Sparkles className="size-6 text-accent" aria-hidden />
-          <p className="mt-2 font-bold">داستان بعدی از آنِ توست</p>
+        <Card className="grad-border rounded-xl md:col-span-1">
+          <span aria-hidden className="icon-bubble bg-gradient-to-br from-accent to-lime shadow-glowAccent animate-bounce-soft"><Sparkles className="size-5" /></span>
+          <p className="mt-3 font-bold">داستان بعدی از آنِ توست</p>
           <p className="mt-1 text-xs leading-6 text-ink-soft">یک مأموریت کوتاه را همین هفته امتحان کن؛ خروجی‌ات اگر اجازهٔ بدهی، همین‌جا روایت می‌شود.</p>
           <Link to="/missions"><Button size="sm" className="mt-3">انتخاب مأموریت</Button></Link>
         </Card>
@@ -33,14 +40,15 @@ export default function Showcase() {
           )}
           <div className="grid gap-4 sm:grid-cols-2">
             {data?.items.map((s) => (
-              <Card key={s.id} className="animate-fade-up flex flex-col gap-2">
+              <Card key={s.id} className="animate-fade-up group relative flex flex-col gap-2 overflow-hidden pt-5">
+                <span aria-hidden className={`absolute inset-x-0 top-0 h-1.5 ${KIND_BAR[s.kind] ?? "bg-gradient-to-l from-primary to-accent"}`} />
                 <div className="flex items-center justify-between gap-2">
-                  <span className="grid size-11 place-items-center rounded-xl bg-bg text-xl" aria-hidden>{KIND_ICON[s.kind] ?? "🌟"}</span>
+                  <span aria-hidden className="grid size-12 place-items-center rounded-2xl bg-bg text-2xl shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:animate-wiggle">{KIND_ICON[s.kind] ?? "🌟"}</span>
                   <Chip tone="info">{STORY_KIND_LABELS[s.kind] ?? s.kind_label_fa}</Chip>
                 </div>
                 <p className="font-bold leading-6">{s.title_fa}</p>
                 <p className="text-sm leading-6 text-ink-soft">{s.body_fa}</p>
-                <div className="mt-auto flex items-center justify-between pt-2 text-[11px] text-ink-soft">
+                <div className="mt-auto flex items-center justify-between border-t border-dashed border-line pt-2 text-[11px] text-ink-soft">
                   <span>{s.subject_label_fa}</span>
                   <span>{formatJalali(s.published_at)}</span>
                 </div>

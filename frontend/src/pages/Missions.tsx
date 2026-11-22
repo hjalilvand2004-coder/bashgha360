@@ -2,10 +2,22 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { get, post } from "../lib/api";
 import { useState } from "react";
 import { createPortal } from "react-dom";
-import { Copy, Check, UserPlus } from "lucide-react";
-import { Button, Card, Chip, EmptyState, PageHeader, stateTone } from "../components/ui";
+import { Copy, Check, UserPlus, Flag, Rocket, Users, Wrench, Compass, GraduationCap, Puzzle, Lightbulb } from "lucide-react";
+import { Button, Card, Chip, EmptyState, PageHeader, Progress, stateTone } from "../components/ui";
 import { formatJalali, STATE_LABELS } from "../lib/format";
 import { MISSION_KIND_LABELS, LOW_COMMITMENT_KINDS } from "../lib/experience";
+
+/** آیکن و رنگ هر نوع مأموریت — کارت‌ها را از هم تشخیص‌پذیر و شاد می‌کند */
+const KIND_STYLE: Record<string, { bubble: string; icon: React.ReactNode }> = {
+  kickoff: { bubble: "bg-gradient-to-br from-gold to-[#d3a04a] shadow-glowGold", icon: <Rocket className="size-5" /> },
+  challenge: { bubble: "bg-gradient-to-br from-accent to-[#0aa9a3] shadow-glowAccent", icon: <Puzzle className="size-5" /> },
+  oneday: { bubble: "bg-gradient-to-br from-violet to-[#8b5cf6] shadow-glowViolet", icon: <Compass className="size-5" /> },
+  workshop: { bubble: "bg-gradient-to-br from-pink to-[#ec4899] shadow-glowPink", icon: <Users className="size-5" /> },
+  skill_evening: { bubble: "bg-gradient-to-br from-orange to-[#f97316] shadow-glowGold", icon: <GraduationCap className="size-5" /> },
+  real_problem: { bubble: "bg-gradient-to-br from-primary to-[#31427f] shadow-glow", icon: <Lightbulb className="size-5" /> },
+  guide: { bubble: "bg-gradient-to-br from-lime to-[#84cc16] shadow-glowAccent", icon: <Wrench className="size-5" /> },
+};
+function kindStyle(kind: string) { return KIND_STYLE[kind] ?? { bubble: "bg-gradient-to-br from-primary to-accent shadow-glow", icon: <Flag className="size-5" /> }; }
 
 type Mission = {
   id: string; title_fa: string; description_fa: string; goal_type: string;
@@ -38,16 +50,19 @@ function GroupsSection() {
       {gmsg && <p role="status" className="rounded-xl border border-ok/30 bg-ok/10 px-3 py-2 text-sm text-ok">{gmsg}</p>}
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {data.items.map((g) => (
-          <Card key={g.id} className="flex flex-col gap-2">
+          <Card key={g.id} className="group flex flex-col gap-2">
             <div className="flex items-start justify-between gap-2">
               <p className="font-bold leading-6">{g.title_fa}</p>
               <Chip tone="gold">{g.duration_label_fa || "—"}</Chip>
             </div>
             {g.goal_fa && <p className="text-xs leading-6 text-ink-soft">{g.goal_fa}</p>}
             {g.expected_output_fa && <Chip tone="ok">خروجی: {g.expected_output_fa}</Chip>}
-            <p className="mt-auto text-xs text-ink-soft">
-              اعضا: {g.member_count.toLocaleString("fa-IR")}{g.capacity ? ` از ${g.capacity.toLocaleString("fa-IR")}` : ""}
-            </p>
+            <div className="mt-auto space-y-1.5">
+              <p className="text-xs text-ink-soft">
+                اعضا: {g.member_count.toLocaleString("fa-IR")}{g.capacity ? ` از ${g.capacity.toLocaleString("fa-IR")}` : ""}
+              </p>
+              {g.capacity ? <Progress value={g.member_count} max={g.capacity} /> : null}
+            </div>
             {g.my_state === "member"
               ? <Chip tone="ok">عضو این گروهی</Chip>
               : <Button size="sm" loading={joinG.isPending} onClick={() => joinG.mutate(g.id)}>پیوستن به گروه</Button>}
@@ -102,14 +117,18 @@ export default function Missions() {
       <PageHeader title="مأموریت‌ها" subtitle="کوتاه شروع کن، چیزی واقعی بساز و هر وقت خواستی خارج شو — خروج از هر مأموریت بدون تنبیه است." />
 
       {kickoffs.length > 0 && !kickoffs[0].my_state && (
-        <Card className="relative overflow-hidden border-accent/40 bg-gradient-to-bl from-accent/10 to-transparent">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <p className="font-bold">🚀 رویداد آغازین: {kickoffs[0].title_fa}</p>
-              <p className="mt-1 text-xs leading-6 text-ink-soft">{kickoffs[0].description_fa}</p>
-              <div className="mt-2 flex flex-wrap gap-2">
-                <Chip tone="ok">خروجی: {kickoffs[0].output_fa || "نشان اولین قدم"}</Chip>
-                {kickoffs[0].duration_label_fa && <Chip>{kickoffs[0].duration_label_fa}</Chip>}
+        <Card className="grad-border relative overflow-hidden rounded-xl">
+          <div aria-hidden className="pointer-events-none absolute -left-10 -top-10 size-40 rounded-full bg-gold/20 blur-3xl" />
+          <div className="relative flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-start gap-3">
+              <span aria-hidden className="icon-bubble bg-gradient-to-br from-gold to-[#d3a04a] shadow-glowGold animate-bounce-soft"><Rocket className="size-5" /></span>
+              <div>
+                <p className="font-extrabold">رویداد آغازین: {kickoffs[0].title_fa}</p>
+                <p className="mt-1 text-xs leading-6 text-ink-soft">{kickoffs[0].description_fa}</p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  <Chip tone="gold">خروجی: {kickoffs[0].output_fa || "نشان اولین قدم"}</Chip>
+                  {kickoffs[0].duration_label_fa && <Chip>{kickoffs[0].duration_label_fa}</Chip>}
+                </div>
               </div>
             </div>
             <Button loading={join.isPending} onClick={() => join.mutate(kickoffs[0].id)}>همین حالا تجربه کن</Button>
@@ -132,42 +151,46 @@ export default function Missions() {
         <EmptyState art="flag" title="در این دسته مأموریتی فعال نیست" body="مأموریت‌های کوتاه و تیمی توسط مدیر باشگاه تعریف می‌شوند." />
       )}
       <div className="grid gap-4 md:grid-cols-2">
-        {items.map((m) => (
-          <Card key={m.id} className={m.mission_kind === "kickoff" ? "border-accent/40" : undefined}>
-            <div className="mb-2 flex flex-wrap items-center gap-2">
-              <p className="font-bold">{m.title_fa}</p>
-              <Chip tone={m.mission_kind === "kickoff" ? "gold" : "info"}>{m.kind_label_fa || MISSION_KIND_LABELS[m.mission_kind] || "مأموریت"}</Chip>
-              {m.is_group && <Chip tone="info">گروهی</Chip>}
-            </div>
-            <p className="text-sm leading-6 text-ink-soft">{m.description_fa}</p>
-            <div className="mt-2 flex flex-wrap gap-2 text-[11px]">
-              {m.duration_label_fa && <Chip>⏱ {m.duration_label_fa}</Chip>}
-              {m.team_size_hint && <Chip>👥 {m.team_size_hint}</Chip>}
-              {m.output_fa && <Chip tone="ok">خروجی: {m.output_fa}</Chip>}
-            </div>
-            {m.activities.length > 0 && (
-              <ul className="mt-2 space-y-1 text-xs text-ink-soft">
-                {m.activities.map((a, i) => <li key={i}>• {a.event_type} — حداقل {a.min_count} بار</li>)}
-              </ul>
-            )}
-            <p className="mt-2 text-xs text-ink-soft">بازه: {formatJalali(m.starts_at)} تا {formatJalali(m.ends_at)}</p>
-            <div className="mt-3 flex flex-wrap items-center gap-2">
-              {m.my_state ? (
-                <>
-                  <Chip tone={stateTone(m.my_state)}>{STATE_LABELS[m.my_state] ?? m.my_state}</Chip>
-                  {m.my_state === "active" && <Button size="sm" variant="ghost" onClick={() => quit.mutate(m.id)}>ترک مأموریت (بدون تنبیه)</Button>}
-                  {m.my_state === "active" && m.team_size_hint !== "فردی" && (
-                    <Button size="sm" variant="accent" onClick={() => { setInviteFor(m); setInviteMsg(null); setContact(""); }}>
-                      <UserPlus className="size-4" aria-hidden /> دعوت دوست
-                    </Button>
-                  )}
-                </>
-              ) : (
-                <Button size="sm" loading={join.isPending} onClick={() => join.mutate(m.id)}>پیوستن</Button>
+        {items.map((m) => {
+          const ks = kindStyle(m.mission_kind);
+          return (
+            <Card key={m.id} className={m.mission_kind === "kickoff" ? "border-gold/50" : undefined}>
+              <div className="mb-2 flex flex-wrap items-center gap-2.5">
+                <span aria-hidden className={`icon-bubble ${ks.bubble}`}>{ks.icon}</span>
+                <p className="font-bold">{m.title_fa}</p>
+                <Chip tone={m.mission_kind === "kickoff" ? "gold" : "info"}>{m.kind_label_fa || MISSION_KIND_LABELS[m.mission_kind] || "مأموریت"}</Chip>
+                {m.is_group && <Chip tone="info">گروهی</Chip>}
+              </div>
+              <p className="text-sm leading-6 text-ink-soft">{m.description_fa}</p>
+              <div className="mt-2 flex flex-wrap gap-2 text-[11px]">
+                {m.duration_label_fa && <Chip>⏱ {m.duration_label_fa}</Chip>}
+                {m.team_size_hint && <Chip>👥 {m.team_size_hint}</Chip>}
+                {m.output_fa && <Chip tone="ok">خروجی: {m.output_fa}</Chip>}
+              </div>
+              {m.activities.length > 0 && (
+                <ul className="mt-2 space-y-1 text-xs text-ink-soft">
+                  {m.activities.map((a, i) => <li key={i}>• {a.event_type} — حداقل {a.min_count} بار</li>)}
+                </ul>
               )}
-            </div>
-          </Card>
-        ))}
+              <p className="mt-2 text-xs text-ink-soft">بازه: {formatJalali(m.starts_at)} تا {formatJalali(m.ends_at)}</p>
+              <div className="mt-3 flex flex-wrap items-center gap-2">
+                {m.my_state ? (
+                  <>
+                    <Chip tone={stateTone(m.my_state)}>{STATE_LABELS[m.my_state] ?? m.my_state}</Chip>
+                    {m.my_state === "active" && <Button size="sm" variant="ghost" onClick={() => quit.mutate(m.id)}>ترک مأموریت (بدون تنبیه)</Button>}
+                    {m.my_state === "active" && m.team_size_hint !== "فردی" && (
+                      <Button size="sm" variant="accent" onClick={() => { setInviteFor(m); setInviteMsg(null); setContact(""); }}>
+                        <UserPlus className="size-4" aria-hidden /> دعوت دوست
+                      </Button>
+                    )}
+                  </>
+                ) : (
+                  <Button size="sm" loading={join.isPending} onClick={() => join.mutate(m.id)}>پیوستن</Button>
+                )}
+              </div>
+            </Card>
+          );
+        })}
       </div>
 
       <section aria-label="گروه‌های علاقه‌ای" className="space-y-3">

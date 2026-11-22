@@ -2,7 +2,7 @@
 
 **«باشگاه هوشمند پیشرفت، مشارکت و تجربهٔ دانشجو»** — FastAPI + React + PostgreSQL + Redis/Celery، ماژولار مونولیت، RTL فارسی.
 
-> **صداقت تحویل:** هر ادعا به کد/آزمون واقعی در همین ریپو ارجاع دارد. آنچه فقط «تولید شده» و آنچه «اجرا و آزموده شده» صریحاً جدا شده‌اند. نتیجهٔ واقعی آزمون‌ها: `backend/TEST_RESULTS.md` — ۲۸/۲۸ پاس روی PostgreSQL 16.2 واقعی (بدون SQLite) + ۸ آزمون SSO (v1.1.0).
+> **صداقت تحویل:** هر ادعا به کد/آزمون واقعی در همین ریپو ارجاع دارد. آنچه فقط «تولید شده» و آنچه «اجرا و آزموده شده» صریحاً جدا شده‌اند. نتیجهٔ واقعی آزمون‌ها: `backend/TEST_RESULTS.md` — ۴۸/۴۸ پاس روی PostgreSQL 16.2 واقعی (بدون SQLite) — شامل ۸ آزمون SSO و ۸ آزمون تجربهٔ باشگاه (v1.3.1).
 
 ## اجرای سریع
 
@@ -62,8 +62,8 @@ npm --prefix frontend run build && python3 scripts/build_portable.py --platform 
 
 ```
 docs/            مرحلهٔ صفر + مستندات عملیاتی (۱۵ سند شماره‌دار)
-backend/         FastAPI — app/core (امنیت/RBAC/UoW/Outbox) + app/modules (۱۶ ماژول)
-                 alembic/ (Migration + triggers بی‌ردپا) · tests/ (۴۰ آزمون) · TEST_RESULTS.md
+backend/         FastAPI — app/core (امنیت/RBAC/UoW/Outbox) + app/modules (۱۷ ماژول)
+                 alembic/ (Migration + triggers بی‌ردپا) · tests/ (۴۸ آزمون) · TEST_RESULTS.md
 frontend/        React+Vite+TS+Tailwind RTL · Design System · ۲۲ صفحهٔ نقش‌محور · Vitest
 nginx/  .github/ scripts/ docker-compose.yml  .env.example
 ```

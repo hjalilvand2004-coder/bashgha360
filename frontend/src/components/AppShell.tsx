@@ -100,16 +100,20 @@ export default function AppShell() {
               const Icon = ICONS[n.icon] ?? Home;
               return (
                 <NavLink key={n.to} to={n.to} end={n.to === "/"}
-                  className={({ isActive }) => `group flex min-h-11 items-center gap-2.5 rounded-xl px-3 text-sm transition-all ${isActive
+                  className={({ isActive }) => `group relative flex min-h-11 items-center gap-2.5 rounded-xl px-3 text-sm transition-all ${isActive
                     ? "bg-gradient-to-l from-primary to-[#31427f] font-bold text-primary-fg shadow-glow dark:from-primary dark:to-[#31427f]"
                     : "text-ink-soft hover:translate-x-[-2px] hover:bg-primary/5 hover:text-ink"}`}>
-                  <Icon className="size-4.5 shrink-0" aria-hidden />
-                  <span className="truncate">{n.label}</span>
+                  {({ isActive }) => (<>
+                    <span aria-hidden className={`absolute right-0 top-1/2 h-5 w-1 -translate-y-1/2 rounded-full bg-accent transition-opacity ${isActive ? "opacity-100" : "opacity-0"}`} />
+                    <Icon className={`size-4.5 shrink-0 transition-transform group-hover:scale-110 ${isActive ? "animate-bounce-soft" : ""}`} aria-hidden />
+                    <span className="truncate">{n.label}</span>
+                  </>)}
                 </NavLink>
               );
             })}
           </nav>
-          <div className="mt-3 rounded-2xl border border-line/70 bg-gradient-to-bl from-accent/10 to-transparent p-3 text-[10px] leading-5 text-ink-soft">
+          <div className="grad-border mt-3 rounded-2xl p-3 text-[10px] leading-5 text-ink-soft">
+            <Trophy className="mb-1 size-4 text-gold" aria-hidden />
             زیرسیستم ۱۷ اکوسیستم دانشجو۳۶۰ — ورود یکپارچه با هویت سازمانی
           </div>
         </aside>
@@ -136,15 +140,19 @@ export default function AppShell() {
               </button>
             </div>
           </header>
-          <nav aria-label="ناوبری موبایل" className="scroll-thin mb-3 flex gap-2 overflow-x-auto lg:hidden">
-            {items.slice(0, 8).map((n) => (
-              <NavLink key={n.to} to={n.to} end={n.to === "/"}
-                className={({ isActive }) => `whitespace-nowrap rounded-full border px-3.5 py-2 text-xs transition ${isActive
-                  ? "border-transparent bg-gradient-to-l from-primary to-[#31427f] font-bold text-primary-fg shadow-glow"
-                  : "border-line bg-surface/70 text-ink-soft backdrop-blur"}`}>
-                {n.label}
-              </NavLink>
-            ))}
+          <nav aria-label="ناوبری موبایل" className="scroll-thin mb-3 flex gap-2 overflow-x-auto pb-1 lg:hidden">
+            {items.slice(0, 8).map((n) => {
+              const Icon = ICONS[n.icon] ?? Home;
+              return (
+                <NavLink key={n.to} to={n.to} end={n.to === "/"}
+                  className={({ isActive }) => `flex items-center gap-1.5 whitespace-nowrap rounded-full border px-3.5 py-2 text-xs transition-all ${isActive
+                    ? "border-transparent bg-gradient-to-l from-primary to-[#31427f] font-bold text-primary-fg shadow-glow"
+                    : "border-line bg-surface/70 text-ink-soft backdrop-blur hover:border-accent/40 hover:text-ink"}`}>
+                  <Icon className="size-3.5" aria-hidden />
+                  {n.label}
+                </NavLink>
+              );
+            })}
           </nav>
           <main id="main" className="animate-fade-up flex-1 pb-10">
             <Outlet />
