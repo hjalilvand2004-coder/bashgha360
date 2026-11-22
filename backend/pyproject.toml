@@ -23,6 +23,10 @@ dependencies = [
 [project.optional-dependencies]
 dev = ["pytest==8.3.4", "hypothesis==6.122.1", "bandit==1.8.2"]
 
+# کشف صریح پکیج: بدون این، setuptools در flat-layout بین «app» و «alembic» گیر می‌کند
+[tool.setuptools.packages.find]
+include = ["app*"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"

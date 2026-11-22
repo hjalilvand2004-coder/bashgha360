@@ -464,7 +464,7 @@ def main() -> None:
     ap.add_argument("--out", default=str(BUILD))
     ap.add_argument("--skip-boot-test", action="store_true")
     args = ap.parse_args()
-    out = Path(args.out)
+    out = Path(args.out).resolve()  # مطلق‌سازی: zip/tar با cwd=out اجرا می‌شوند؛ مسیر نسبی نمی‌رود
     out.mkdir(parents=True, exist_ok=True)
 
     assert (FRONTEND / "dist" / "index.html").exists(), "build the SPA first (npm run build)"
