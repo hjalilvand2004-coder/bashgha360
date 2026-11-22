@@ -28,8 +28,7 @@ jobs:
         working-directory: backend
         run: alembic upgrade head
       - name: No-eval guard (PNT-02)
-        working-directory: backend
-        run: "! grep -rn \"eval(\\|exec(\\|__import__\" app/modules/*/service.py app/modules/*/router.py"
+        run: python3 scripts/guard_no_eval.py
       - name: Security scan
         working-directory: backend
         run: bandit -r app -q || true
