@@ -18,6 +18,8 @@ dependencies = [
   "httpx==0.28.1",
   "python-multipart==0.0.20",
   "email-validator==2.2.0",
+  # پایتون ویندوز (embeddable / venv بدون OS tzdata) به این پکیج نیاز دارد؛ روی لینوکس بی‌ضرر
+  "tzdata==2025.2",
 ]
 
 [project.optional-dependencies]

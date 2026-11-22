@@ -387,6 +387,9 @@ def _seed(db) -> None:
                              delivery="in_app", goal_tags="exam_prep", state="active")
         db.add(r_unlimited)
     db.flush()
+    # داده‌های پایه (provider/پاداش) را قبل از گام‌های نمایشی نهایی می‌کنیم —
+    # تا rollback در exceptِ پاداش نمایشی، آن‌ها را از بین نبرد (ارجاع بخش‌های بعدی).
+    db.commit()
 
     from .modules.rewards_fulfillment.models import RewardRequest
 
@@ -397,21 +400,35 @@ def _seed(db) -> None:
             return None
         return rw.request_reward(db, university_id=u1.id, student_ref=sref, reward_id=reward.id, actor=actor)
 
-    req1 = _request_once(sara, r_unlimited)
-    if req1 is not None:
-        rw.approve(db, req1, users["mgr1@u1.demo"].id)
-        rw.start_fulfilling(db, req1, users["mgr1@u1.demo"].id)
-        rw.deliver_in_app(db, req1, users["mgr1@u1.demo"].id)
+    # پاداش‌های نمونه — هر گام مستقل و غیرمرگبار: اگر به هر دلیل (مثلاً قرنطینهٔ
+    # رویدادهای LMS و کمبود امتیاز) اجرا نشد، فقط WARN می‌دهیم؛ seed و بوت ادامه می‌یابد.
+    try:
+        req1 = _request_once(sara, r_unlimited)
+        if req1 is not None:
+            rw.approve(db, req1, users["mgr1@u1.demo"].id)
+            rw.start_fulfilling(db, req1, users["mgr1@u1.demo"].id)
+            rw.deliver_in_app(db, req1, users["mgr1@u1.demo"].id)
+    except Exception as exc:  # noqa: BLE001 — دیتای نمایشی هرگز نباید بوت را ببندد
+        db.rollback()
+        print(f"  WARN: پاداش نمونهٔ ۱ skipped: {str(exc)[:120]}")
 
-    req2 = _request_once(reza, r_limited)
-    if req2 is not None:
-        rw.cancel(db, req2, actor="seed", reason_fa="نمونهٔ درخواست لغوشده")
+    try:
+        req2 = _request_once(reza, r_limited)
+        if req2 is not None:
+            rw.cancel(db, req2, actor="seed", reason_fa="نمونهٔ درخواست لغوشده")
+    except Exception as exc:  # noqa: BLE001
+        db.rollback()
+        print(f"  WARN: پاداش نمونهٔ ۲ skipped: {str(exc)[:120]}")
 
-    req3 = _request_once(sara, r_limited)
-    if req3 is not None:
-        rw.approve(db, req3, users["mgr1@u1.demo"].id)
-        rw.start_fulfilling(db, req3, users["mgr1@u1.demo"].id)
-        rw.mark_failed(db, req3, "نمونهٔ ارائه‌دهنده: شکست تحویل", actor="seed")
+    try:
+        req3 = _request_once(sara, r_limited)
+        if req3 is not None:
+            rw.approve(db, req3, users["mgr1@u1.demo"].id)
+            rw.start_fulfilling(db, req3, users["mgr1@u1.demo"].id)
+            rw.mark_failed(db, req3, "نمونهٔ ارائه‌دهنده: شکست تحویل", actor="seed")
+    except Exception as exc:  # noqa: BLE001
+        db.rollback()
+        print(f"  WARN: پاداش نمونهٔ ۳ skipped: {str(exc)[:120]}")
     db.commit()
 
     # ---- ۱۲) تجربهٔ باشگاه v1.3: نشان داستان‌محور، مأموریت ملموس، گروه علاقه‌ای، پاداش تجربه‌ساز ----

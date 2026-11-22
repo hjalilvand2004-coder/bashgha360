@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build Club360 portable bundles (Windows + Linux) — fully self-contained.
+r"""Build Club360 portable bundles (Windows + Linux) — fully self-contained.
 
 Windows: python.org embeddable runtime + wheels (win_amd64/cp312) + app/ + web/
 Linux:   python-build-standalone runtime + wheels + app/ + web/
@@ -47,7 +47,7 @@ def bundle_version() -> str:
             return t.stdout.strip()
     except Exception:
         pass
-    return "v1.3.0"
+    return "v1.3.1"
 
 ENV_FILE = """\
 # ============================================================
@@ -201,7 +201,9 @@ def portable_requirements() -> Path:
         "bcrypt==4.2.1\n"
         "httpx==0.28.1\n"
         "python-multipart==0.0.20\n"
-        "email-validator==2.2.0\n",
+        "email-validator==2.2.0\n"
+        # ویندوز embeddable دیتابیس IANA ندارد؛ بدون tzdata همهٔ ZoneInfo("Asia/Tehran") می‌شکند
+        "tzdata==2025.2\n",
         encoding="utf-8",
     )
     return f
