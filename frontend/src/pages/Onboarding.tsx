@@ -120,7 +120,7 @@ export default function Onboarding() {
           <div className="flex flex-wrap gap-2">
             {(data?.interest_options ?? []).map((o) => (
               <button key={o.key} onClick={() => setInterests((s) => s.includes(o.key) ? s.filter((x) => x !== o.key) : s.length < 5 ? [...s, o.key] : s)}
-                className={`rounded-full border px-3.5 py-2 text-xs transition ${interests.includes(o.key) ? "border-transparent bg-gradient-to-l from-primary to-[#31427f] font-bold text-primary-fg shadow-glow" : "border-line bg-surface text-ink-soft hover:border-accent/50"}`}>
+                className={`rounded-full border px-3.5 py-2 text-xs transition ${interests.includes(o.key) ? "border-transparent bg-gradient-to-l from-primary to-accent font-bold text-primary-fg shadow-glow" : "border-line bg-surface text-ink-soft hover:border-accent/50"}`}>
                 {INTEREST_LABELS[o.key] ?? o.label_fa}
               </button>
             ))}

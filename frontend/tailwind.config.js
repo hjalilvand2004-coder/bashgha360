@@ -1,5 +1,6 @@
 /** Tailwind config — design tokens of باشگاه۳۶۰ (docs/07). RTL-first.
- * v1.4 — «جذاب دانشجویی»: پالت شاد چندرنگ، شعاع بزرگ‌تر، درخشش‌های رنگی، انیمیشن جشن. */
+ * v1.4 — «جذاب دانشجویی»: پالت شاد چندرنگ، شعاع بزرگ‌تر، درخشش‌های رنگی، انیمیشن جشن.
+ * v1.6 — پالت و سایه‌ها بر پایهٔ «Aurora Premium» (شب پیش‌فرض / روز)؛ مقادیر در index.css. */
 export default {
   darkMode: "class",
   content: ["./index.html", "./src/**/*.{ts,tsx}"],
@@ -15,6 +16,7 @@ export default {
         pink: { DEFAULT: "var(--c-pink)" },
         orange: { DEFAULT: "var(--c-orange)" },
         lime: { DEFAULT: "var(--c-lime)" },
+        cyan: { DEFAULT: "var(--c-cyan)" },
         ink: { DEFAULT: "var(--c-text)", soft: "var(--c-text-muted)" },
         line: "var(--c-border)",
         ok: "var(--c-success)",
@@ -24,15 +26,16 @@ export default {
       fontFamily: { sans: ["Vazirmatn", "Tahoma", "sans-serif"] },
       borderRadius: { sm: "10px", md: "16px", lg: "22px", xl: "28px" },
       boxShadow: {
-        sm: "0 1px 2px rgba(15,20,32,.06)",
-        md: "0 6px 18px rgba(15,20,32,.09)",
-        lg: "0 16px 40px rgba(15,20,32,.16)",
-        glow: "0 4px 18px rgba(46,80,190,.28)",
-        glowAccent: "0 4px 18px rgba(14,159,154,.30)",
-        glowViolet: "0 4px 20px rgba(139,92,246,.30)",
-        glowPink: "0 4px 20px rgba(236,72,153,.28)",
-        glowGold: "0 4px 20px rgba(212,160,74,.32)",
-        lift: "0 10px 30px -8px rgba(15,20,32,.22)",
+        /* v1.6 — سایه‌ها از توکن‌های Aurora می‌آیند تا بین شب و روز درست جابه‌جا شوند (index.css) */
+        sm: "var(--sh-sm)",
+        md: "var(--sh-md)",
+        lg: "var(--sh-lg)",
+        glow: "var(--sh-glow)",
+        glowAccent: "0 4px 18px rgba(244, 114, 182, 0.30)",
+        glowViolet: "0 4px 20px rgba(167, 139, 250, 0.30)",
+        glowPink: "0 4px 20px rgba(244, 114, 182, 0.28)",
+        glowGold: "0 4px 20px rgba(251, 191, 36, 0.32)",
+        lift: "var(--sh-lift)",
       },
       keyframes: {
         "pop-in": { "0%": { opacity: "0", transform: "scale(.96)" }, "100%": { opacity: "1", transform: "scale(1)" } },

@@ -1,10 +1,22 @@
 <!doctype html>
-<html lang="fa" dir="rtl" class="light">
+<html lang="fa" dir="rtl" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="باشگاه دانشجو۳۶۰ — باشگاه هوشمند پیشرفت، مشارکت و تجربهٔ دانشجو" />
     <title>باشگاه دانشجو۳۶۰</title>
+    <script>
+      /* no-flash (Aurora Premium v1.6) — تم ذخیره‌شده قبل از رندر اعمال می‌شود؛ پیش‌فرض: شب */
+      (function () {
+        try {
+          var t = localStorage.getItem("theme");
+          var light = t === "light";
+          var h = document.documentElement;
+          h.classList.toggle("light", light);
+          h.classList.toggle("dark", !light);
+        } catch (e) { /* localStorage در دسترس نیست — حالت شب پیش‌فرض می‌ماند */ }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

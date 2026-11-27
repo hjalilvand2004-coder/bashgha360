@@ -89,7 +89,7 @@ export default function Peers() {
         {data?.items.map((a) => (
           <Card key={a.id} className="flex flex-col gap-2.5">
             <div className="flex items-start gap-2.5">
-              <span aria-hidden className="icon-bubble bg-gradient-to-br from-[#155e63] to-accent shadow-glowAccent">{PEER_KIND_ICONS[a.activity_kind] ?? "✨"}</span>
+              <span aria-hidden className="icon-bubble bg-gradient-to-br from-cyan to-accent shadow-glowAccent">{PEER_KIND_ICONS[a.activity_kind] ?? "✨"}</span>
               <div className="min-w-0 flex-1">
                 <p className="font-bold leading-6">{a.title_fa}</p>
                 <p className="text-xs text-ink-soft">{PEER_KIND_LABELS[a.activity_kind] ?? a.activity_kind}</p>

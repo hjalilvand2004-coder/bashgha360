@@ -23,6 +23,7 @@ import Approvals, { Advisees, ReviewCases, AppealsQueue } from "./pages/Workflow
 import { AdminOverview, AdminPolicies, AdminCatalog, AdminHealth, PolicyApprovals } from "./pages/Admin";
 import SsoSettingsPage from "./pages/SsoSettings";
 import { Provider, Audit, Tech } from "./pages/RolePages";
+import SmartAssistant from "./components/SmartAssistant";
 
 function Protected() {
   const { me, loading } = useAuth();
@@ -49,7 +50,10 @@ function RequireRoles({ roles, children }: { roles: string[]; children: React.Re
 
 export default function App() {
   return (
-    <Routes>
+    <>
+      {/* دستیار هوشمند «دانشگاه هوشمند من» — در همهٔ صفحات، پایین‌چپ (v1.6) */}
+      <SmartAssistant />
+      <Routes>
       <Route path="/login" element={<Login />} />
       <Route element={<Protected />}>
         <Route path="/" element={<Dashboard />} />
@@ -84,6 +88,7 @@ export default function App() {
         <Route path="/tech" element={<RequirePerm perm="tech:admin">{<Tech />}</RequirePerm>} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+      </Routes>
+    </>
   );
 }

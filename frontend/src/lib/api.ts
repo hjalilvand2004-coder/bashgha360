@@ -16,6 +16,8 @@ export class ApiError extends Error {
 
 let accessToken: string | null = null;
 export const setAccessToken = (t: string | null) => { accessToken = t; };
+/** خواندن توکن جاری فقط برای پل‌های درون‌حافظه‌ای (مثل ویجت دستیار هوشمند — v1.6)؛ هرگز به localStorage نمی‌رود (ACC-15). */
+export const getAccessToken = () => accessToken;
 
 async function refreshOnce(): Promise<boolean> {
   const res = await fetch("/api/v1/auth/refresh", { method: "POST", credentials: "include" });

@@ -10,11 +10,11 @@ import { MISSION_KIND_LABELS, LOW_COMMITMENT_KINDS } from "../lib/experience";
 /** آیکن و رنگ هر نوع مأموریت — کارت‌ها را از هم تشخیص‌پذیر و شاد می‌کند */
 const KIND_STYLE: Record<string, { bubble: string; icon: React.ReactNode }> = {
   kickoff: { bubble: "bg-gradient-to-br from-gold to-[#d3a04a] shadow-glowGold", icon: <Rocket className="size-5" /> },
-  challenge: { bubble: "bg-gradient-to-br from-accent to-[#0aa9a3] shadow-glowAccent", icon: <Puzzle className="size-5" /> },
+  challenge: { bubble: "bg-gradient-to-br from-cyan to-primary shadow-glow", icon: <Puzzle className="size-5" /> },
   oneday: { bubble: "bg-gradient-to-br from-violet to-[#8b5cf6] shadow-glowViolet", icon: <Compass className="size-5" /> },
   workshop: { bubble: "bg-gradient-to-br from-pink to-[#ec4899] shadow-glowPink", icon: <Users className="size-5" /> },
   skill_evening: { bubble: "bg-gradient-to-br from-orange to-[#f97316] shadow-glowGold", icon: <GraduationCap className="size-5" /> },
-  real_problem: { bubble: "bg-gradient-to-br from-primary to-[#31427f] shadow-glow", icon: <Lightbulb className="size-5" /> },
+  real_problem: { bubble: "bg-gradient-to-br from-primary to-accent shadow-glow", icon: <Lightbulb className="size-5" /> },
   guide: { bubble: "bg-gradient-to-br from-lime to-[#84cc16] shadow-glowAccent", icon: <Wrench className="size-5" /> },
 };
 function kindStyle(kind: string) { return KIND_STYLE[kind] ?? { bubble: "bg-gradient-to-br from-primary to-accent shadow-glow", icon: <Flag className="size-5" /> }; }
@@ -141,7 +141,7 @@ export default function Missions() {
       <div className="flex flex-wrap gap-2" role="tablist" aria-label="فیلتر مأموریت‌ها">
         {([["all", "همهٔ مأموریت‌ها"], ["quick", "⏱ کوتاه و کم‌تعهد"], ["team", "👥 تیمی و واقعی"]] as const).map(([k, label]) => (
           <button key={k} role="tab" aria-selected={tab === k} onClick={() => setTab(k)}
-            className={`rounded-full border px-4 py-2 text-xs transition ${tab === k ? "border-transparent bg-gradient-to-l from-primary to-[#31427f] font-bold text-primary-fg shadow-glow" : "border-line bg-surface text-ink-soft hover:border-accent/50"}`}>
+            className={`rounded-full border px-4 py-2 text-xs transition ${tab === k ? "border-transparent bg-gradient-to-l from-primary to-accent font-bold text-primary-fg shadow-glow" : "border-line bg-surface text-ink-soft hover:border-accent/50"}`}>
             {label}
           </button>
         ))}

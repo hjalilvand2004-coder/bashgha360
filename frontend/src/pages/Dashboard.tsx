@@ -59,8 +59,8 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
-      {/* هیروی وعده‌محور */}
-      <div className="relative overflow-hidden rounded-xl bg-gradient-to-bl from-primary via-[#2b3a78] to-[#155e63] p-6 text-primary-fg shadow-lg">
+      {/* هیروی وعده‌محور — پنل شبِ Aurora در هر دو تم (v1.6) */}
+      <div className="relative overflow-hidden rounded-xl bg-gradient-to-bl from-[#0f0c29] via-[#2a1f5c] to-[#7c3aed] p-6 text-white shadow-lg">
         <span aria-hidden className="pointer-events-none absolute -left-14 -top-14 size-48 rounded-full bg-accent/25 blur-3xl" />
         <span aria-hidden className="pointer-events-none absolute -bottom-16 right-10 size-56 rounded-full bg-white/10 blur-3xl" />
         <div className="relative">
@@ -221,7 +221,7 @@ export default function Dashboard() {
           <div className="grid gap-4 md:grid-cols-3">
             <Card>
               <p className="mb-1 text-xs text-ink-soft">کارت عضویت دیجیتال</p>
-              <div className="rounded-lg bg-gradient-to-l from-primary to-[#2c3d7a] p-4 text-primary-fg shadow-md">
+              <div className="rounded-lg bg-gradient-to-l from-primary to-accent p-4 text-primary-fg shadow-md">
                 <MembershipArt className="mb-2 w-full opacity-70" />
                 <p className="text-sm font-extrabold">{me?.display_name}</p>
                 <p className="mt-1 text-[11px] opacity-80" dir="ltr">{membership?.membership_no ?? "—"}</p>

@@ -41,8 +41,8 @@ export default function Join() {
       <PageHeader title="عضویت در باشگاه" subtitle="مشارکت کاملاً داوطلبانه است؛ عدم عضویت هیچ خدمات پایهٔ آموزشی را محدود نمی‌کند."
         badge={my?.state && my.state !== "draft" ? undefined : undefined} />
 
-      {/* پیام معرفی تجربه‌محور — پیش از جزئیات، جوابِ «برای من چه دارد؟» */}
-      <div className="mb-5 rounded-xl bg-gradient-to-bl from-primary via-[#2b3a78] to-[#155e63] p-6 text-primary-fg shadow-lg">
+      {/* پیام معرفی تجربه‌محور — پنل شبِ Aurora در هر دو تم (v1.6) */}
+      <div className="mb-5 rounded-xl bg-gradient-to-bl from-[#0f0c29] via-[#2a1f5c] to-[#7c3aed] p-6 text-white shadow-lg">
         <p className="text-xs opacity-80">چیزی که بلدی، چیزی که دوست داری یاد بگیری، و کاری که می‌توانی با دیگران بسازی — همه‌اش می‌تواند بخشی از تجربهٔ تو در باشگاه باشد.</p>
         <p className="mt-2 text-lg font-extrabold">در باشگاه۳۶۰ مأموریت‌های کوتاه را امتحان می‌کنی، با هم‌علاقه‌ها همکاری می‌کنی و دستاوردهای واقعی‌ات را ثبت می‌کنی.</p>
         <p className="mt-2 text-xs leading-6 opacity-80">عضویت داوطلبانه است؛ امتیازها روی نمره و وضعیت تحصیلی‌ات اثری ندارند و هر وقت بخواهی می‌توانی خارج شوی.</p>

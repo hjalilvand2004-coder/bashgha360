@@ -103,7 +103,7 @@ export default function Voice() {
             <div className="mt-3 flex flex-wrap items-center gap-2">
               <button aria-pressed={p.my_vote}
                 onClick={() => vote.mutate(p.id)}
-                className={`inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-medium transition-all ${p.my_vote ? "border-transparent bg-gradient-to-l from-primary to-[#31427f] text-primary-fg shadow-glow" : "border-line bg-surface text-ink-soft hover:border-accent/50 hover:text-ink"}`}>
+                className={`inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-medium transition-all ${p.my_vote ? "border-transparent bg-gradient-to-l from-primary to-accent text-primary-fg shadow-glow" : "border-line bg-surface text-ink-soft hover:border-accent/50 hover:text-ink"}`}>
                 👍 {p.my_vote ? "رأی دادی (برابر)" : "رأی می‌دهم"} · {p.vote_count.toLocaleString("fa-IR")}
               </button>
               <span className="text-[11px] text-ink-soft">{PROPOSAL_KIND_LABELS[p.kind] ?? p.kind} · {formatJalali(p.created_at)}</span>

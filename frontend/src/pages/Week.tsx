@@ -42,7 +42,7 @@ export default function Week() {
 
   const F = ({ on, set, label }: { on: boolean; set: (v: boolean) => void; label: string }) => (
     <button aria-pressed={on} onClick={() => set(!on)}
-      className={`rounded-full border px-3.5 py-2 text-xs transition-all ${on ? "border-transparent bg-gradient-to-l from-primary to-[#31427f] font-bold text-primary-fg shadow-glow" : "border-line bg-surface text-ink-soft hover:border-accent/50 hover:text-ink"}`}>
+      className={`rounded-full border px-3.5 py-2 text-xs transition-all ${on ? "border-transparent bg-gradient-to-l from-primary to-accent font-bold text-primary-fg shadow-glow" : "border-line bg-surface text-ink-soft hover:border-accent/50 hover:text-ink"}`}>
       {label}
     </button>
   );

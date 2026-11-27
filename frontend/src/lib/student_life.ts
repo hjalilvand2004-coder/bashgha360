@@ -2,7 +2,7 @@
 
 /** وعده‌های محصول — هویت تازهٔ باشگاه (ارزیابی v1.5 §۲) */
 export const PROMISES: { to: string; title: string; say: string; icon: string; grad: string; shadow: string }[] = [
-  { to: "/peers", title: "آدم‌های من", say: "آدم‌های هم‌علاقه‌ام را پیدا می‌کنم", icon: "🧑‍🤝‍🧑", grad: "from-[#155e63] to-accent", shadow: "shadow-glowAccent" },
+  { to: "/peers", title: "آدم‌های من", say: "آدم‌های هم‌علاقه‌ام را پیدا می‌کنم", icon: "🧑‍🤝‍🧑", grad: "from-cyan to-accent", shadow: "shadow-glowAccent" },
   { to: "/week", title: "تجربه‌های من", say: "دانشگاه را جذاب‌تر و متنوع‌تر تجربه می‌کنم", icon: "🎪", grad: "from-violet to-[#8b5cf6]", shadow: "shadow-glowViolet" },
   { to: "/bundles", title: "آیندهٔ من", say: "مهارت، نمونه‌کار و فرصت واقعی می‌سازم", icon: "🛠️", grad: "from-gold to-[#d3a04a]", shadow: "shadow-glowGold" },
   { to: "/voice", title: "اثر من", say: "ایده‌ام شنیده می‌شود و می‌توانم چیزی را تغییر بدهم", icon: "📣", grad: "from-pink to-[#ec4899]", shadow: "shadow-glowPink" },

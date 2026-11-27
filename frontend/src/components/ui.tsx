@@ -14,8 +14,8 @@ export function Button({ variant = "primary", size = "md", loading, className, c
       className={clsx(
         "inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-all duration-200 active:scale-[.97] disabled:pointer-events-none disabled:opacity-50",
         { sm: "min-h-9 px-3 text-xs", md: "min-h-11 px-4 text-sm", lg: "min-h-12 px-6 text-base" }[size],
-        variant === "primary" && "bg-gradient-to-l from-primary to-[#31427f] text-primary-fg shadow-glow hover:-translate-y-0.5 hover:brightness-110 hover:shadow-lg dark:from-primary dark:to-[#31427f]",
-        variant === "accent" && "bg-gradient-to-l from-accent to-[#0aa9a3] text-white shadow-glowAccent hover:-translate-y-0.5 hover:brightness-110 dark:text-[#0b1020]",
+        variant === "primary" && "bg-gradient-to-l from-primary to-accent text-primary-fg shadow-glow hover:-translate-y-0.5 hover:brightness-110 hover:shadow-lg dark:from-primary dark:to-accent",
+        variant === "accent" && "bg-gradient-to-l from-accent to-[#ec4899] text-white shadow-glowAccent hover:-translate-y-0.5 hover:brightness-110 dark:text-[#050514]",
         variant === "gold" && "bg-gradient-to-l from-gold to-[#d3a04a] text-white shadow-glowGold hover:-translate-y-0.5 hover:brightness-110 dark:text-[#0b1020]",
         variant === "ghost" && "border border-line bg-surface text-ink transition hover:-translate-y-0.5 hover:border-accent/50 hover:bg-accent/5 hover:shadow-md",
         variant === "danger" && "bg-gradient-to-l from-bad to-[#c5443c] text-white shadow-md hover:-translate-y-0.5 hover:brightness-110",
@@ -165,8 +165,8 @@ export function Toast({ toasts }: { toasts: { id: number; text: string; tone?: "
 
 /* ---- v1.4: رنگ‌های شاد کارت‌های آماری ---- */
 export const HUES = {
-  primary: { bubble: "bg-gradient-to-br from-[#2b3a78] to-primary", text: "text-primary", glow: "shadow-glow" },
-  accent: { bubble: "bg-gradient-to-br from-accent to-[#0aa9a3]", text: "text-accent", glow: "shadow-glowAccent" },
+  primary: { bubble: "bg-gradient-to-br from-[#0f0c29] to-primary", text: "text-primary", glow: "shadow-glow" },
+  accent: { bubble: "bg-gradient-to-br from-cyan to-accent", text: "text-accent", glow: "shadow-glowAccent" },
   gold: { bubble: "bg-gradient-to-br from-gold to-[#d3a04a]", text: "text-gold", glow: "shadow-glowGold" },
   violet: { bubble: "bg-gradient-to-br from-violet to-[#8b5cf6]", text: "text-violet", glow: "shadow-glowViolet" },
   pink: { bubble: "bg-gradient-to-br from-pink to-[#ec4899]", text: "text-pink", glow: "shadow-glowPink" },
@@ -197,7 +197,7 @@ export function PageHeader({ title, subtitle, badge, icon }:
     <header className="mb-5">
       <div className="flex flex-wrap items-center gap-2.5">
         {(icon || badge) && (
-          <span aria-hidden className="grid size-11 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-primary via-[#31427f] to-accent text-primary-fg shadow-glow">
+          <span aria-hidden className="grid size-11 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-primary to-accent text-primary-fg shadow-glow">
             {icon}
           </span>
         )}

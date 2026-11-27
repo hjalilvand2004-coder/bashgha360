@@ -5,6 +5,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { get } from "../lib/api";
 import { Button, Input } from "../components/ui";
+import ThemeToggle from "../components/ThemeToggle";
 import { useAuth } from "../lib/auth";
 import { toFa } from "../lib/format";
 
@@ -54,9 +55,14 @@ export default function Login() {
         <div className="absolute inset-0 bg-grid mask-fade" />
       </div>
 
+      {/* کلید تم شب/روز (Aurora) — گوشهٔ صفحه، بیرون از کارت ورود */}
+      <div className="fixed left-4 top-4 z-30">
+        <ThemeToggle />
+      </div>
+
       <div className="animate-fade-up grid w-full max-w-4xl overflow-hidden rounded-3xl border border-line/70 bg-surface/80 shadow-lg backdrop-blur-xl md:grid-cols-2">
-        {/* ستون معرفی — فقط دسکتاپ */}
-        <div className="relative hidden flex-col justify-between bg-gradient-to-bl from-primary via-[#2b3a78] to-[#1a6f74] p-8 text-primary-fg md:flex">
+        {/* ستون معرفی — فقط دسکتاپ؛ پنل شبِ Aurora در هر دو تم */}
+        <div className="relative hidden flex-col justify-between bg-gradient-to-bl from-[#0f0c29] via-[#2a1f5c] to-[#7c3aed] p-8 text-white md:flex">
           <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
             <span className="absolute -right-10 -top-10 size-44 rounded-full bg-white/10 blur-2xl" />
             <span className="absolute -bottom-12 -left-8 size-56 rounded-full bg-accent/30 blur-3xl" />
@@ -93,7 +99,7 @@ export default function Login() {
           <a
             href="/api/v1/auth/sso/login"
             data-testid="sso-login"
-            className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-l from-primary to-[#31427f] px-4 py-3 text-sm font-bold text-primary-fg shadow-glow transition hover:brightness-110 active:scale-[.98]"
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-l from-primary to-accent px-4 py-3 text-sm font-bold text-primary-fg shadow-glow transition hover:brightness-110 active:scale-[.98]"
           >
             <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
               <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3" strokeLinecap="round" strokeLinejoin="round" />

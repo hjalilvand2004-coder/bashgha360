@@ -5,12 +5,13 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import {
   Home, Target, ListOrdered, Medal, Flag, Gift, Receipt, Sparkles, ShieldCheck, Lock,
   CheckSquare, Users, Gauge, Scale, Package, Activity, Stamp, Store, FolderOpen, Gavel,
-  FileSearch, Terminal, LogOut, Moon, Sun, WifiOff, KeyRound, Trophy, CalendarDays, Hammer,
+  FileSearch, Terminal, LogOut, WifiOff, KeyRound, Trophy, CalendarDays, Hammer,
   Megaphone,
 } from "lucide-react";
 import { useAuth, hasRole } from "../lib/auth";
 import { NAV } from "../design/tokens";
 import { Chip } from "./ui";
+import ThemeToggle from "./ThemeToggle";
 
 const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   home: Home, target: Target, list: ListOrdered, medal: Medal, flag: Flag, gift: Gift,
@@ -30,7 +31,7 @@ const ROLE_FA: Record<string, string> = {
 /** لوگوی گرادیانی باشگاه — یک‌جا تعریف شده تا در سایدبار/هدر/موبایل یکسان باشد. */
 function BrandMark({ className = "size-9" }: { className?: string }) {
   return (
-    <span className={`grid ${className} shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-primary via-[#31427f] to-accent text-primary-fg shadow-glow`}>
+    <span className={`grid ${className} shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-primary to-accent text-primary-fg shadow-glow`}>
       <svg viewBox="0 0 32 32" className="size-1/2" aria-hidden>
         <circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" strokeWidth="2.6" opacity=".9" />
         <circle cx="16" cy="16" r="5" fill="currentColor" />
@@ -41,15 +42,8 @@ function BrandMark({ className = "size-9" }: { className?: string }) {
 
 export default function AppShell() {
   const { me, loading, logout } = useAuth();
-  const [dark, setDark] = useState(() => localStorage.getItem("theme") === "dark");
   const [offline, setOffline] = useState(!navigator.onLine);
   const nav = useNavigate();
-
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", dark);
-    document.documentElement.classList.toggle("light", !dark);
-    localStorage.setItem("theme", dark ? "dark" : "light");
-  }, [dark]);
 
   useEffect(() => {
     const on = () => setOffline(false), off = () => setOffline(true);
@@ -102,7 +96,7 @@ export default function AppShell() {
               return (
                 <NavLink key={n.to} to={n.to} end={n.to === "/"}
                   className={({ isActive }) => `group relative flex min-h-11 items-center gap-2.5 rounded-xl px-3 text-sm transition-all ${isActive
-                    ? "bg-gradient-to-l from-primary to-[#31427f] font-bold text-primary-fg shadow-glow dark:from-primary dark:to-[#31427f]"
+                    ? "bg-gradient-to-l from-primary to-accent font-bold text-primary-fg shadow-glow"
                     : "text-ink-soft hover:translate-x-[-2px] hover:bg-primary/5 hover:text-ink"}`}>
                   {({ isActive }) => (<>
                     <span aria-hidden className={`absolute right-0 top-1/2 h-5 w-1 -translate-y-1/2 rounded-full bg-accent transition-opacity ${isActive ? "opacity-100" : "opacity-0"}`} />
@@ -131,10 +125,7 @@ export default function AppShell() {
                 <span className="grid size-9 place-items-center rounded-full bg-gradient-to-br from-primary to-accent text-xs font-extrabold text-primary-fg shadow-glow" aria-hidden>{initials}</span>
                 <span className="text-sm">{me.display_name}</span>
               </span>
-              <button onClick={() => setDark(!dark)} aria-label={dark ? "حالت روشن" : "حالت تاریک"}
-                className="grid size-11 place-items-center rounded-xl border border-line bg-surface transition hover:border-accent hover:text-accent">
-                {dark ? <Sun className="size-5" /> : <Moon className="size-5" />}
-              </button>
+              <ThemeToggle />
               <button onClick={async () => { await logout(); nav("/login"); }}
                 className="flex min-h-11 items-center gap-1.5 rounded-xl border border-line bg-surface px-3 text-sm transition hover:border-bad/50 hover:text-bad">
                 <LogOut className="size-4" aria-hidden /> خروج
@@ -147,7 +138,7 @@ export default function AppShell() {
               return (
                 <NavLink key={n.to} to={n.to} end={n.to === "/"}
                   className={({ isActive }) => `flex items-center gap-1.5 whitespace-nowrap rounded-full border px-3.5 py-2 text-xs transition-all ${isActive
-                    ? "border-transparent bg-gradient-to-l from-primary to-[#31427f] font-bold text-primary-fg shadow-glow"
+                    ? "border-transparent bg-gradient-to-l from-primary to-accent font-bold text-primary-fg shadow-glow"
                     : "border-line bg-surface/70 text-ink-soft backdrop-blur hover:border-accent/40 hover:text-ink"}`}>
                   <Icon className="size-3.5" aria-hidden />
                   {n.label}

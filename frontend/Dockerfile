@@ -1,5 +1,8 @@
 FROM node:22-alpine AS build
 WORKDIR /app
+# v1.6 — آدرس هستهٔ عامل «دانشگاه هوشمند من» در زمان ساخت در باندل تزریق می‌شود
+ARG VITE_MSU_AGENT_URL=""
+ENV VITE_MSU_AGENT_URL=$VITE_MSU_AGENT_URL
 COPY package.json package-lock.json* ./
 RUN npm ci || npm install --no-audit --no-fund
 COPY . .
